@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Specifies the character encoding to use -->
+    <meta charset="UTF-8">
+    <!-- Ensures proper scaling on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baba GPT</title>
+    <!-- Link to our CSS file for styling -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Using Google Fonts for a modern look (Inter font) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Using Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Main Application Container -->
+    <div class="app-container">
+        
+        <!-- Sidebar for Chat History -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <!-- Button to start a new chat -->
+                <button id="new-chat-btn" class="new-chat-btn">
+                    <i class="fas fa-plus"></i> New Chat
+                </button>
+            </div>
+            
+            <!-- List of previous chats will be injected here by JavaScript -->
+            <div class="chat-history-list" id="chat-history-list">
+                <!-- Chat history items will appear here dynamically -->
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="main-chat">
+            <!-- Header section of the chat area -->
+            <header class="chat-header">
+                <h2>Baba GPT</h2>
+                <div class="header-actions">
+                    <button id="logout-btn" class="logout-btn" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                    <button id="mobile-menu-btn" class="mobile-menu-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Container where all messages will appear -->
+            <div class="chat-messages" id="chat-messages">
+                <!-- Welcome container shown when there are no messages -->
+                <div class="welcome-screen" id="welcome-screen">
+                    <div class="bot-icon-large"><i class="fas fa-robot"></i></div>
+                    <h1>Baba GPT</h1>
+                    <h2>How can I help you today?</h2>
+                </div>
+                <!-- Dynamic messages will be appended here -->
+            </div>
+
+            <!-- Input Area at the bottom -->
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <!-- Textarea for user input, auto-expanding -->
+                    <textarea id="user-input" placeholder="Message Baba GPT..." rows="1"></textarea>
+                    <!-- Send button -->
+                    <button id="send-btn" class="send-btn" disabled>
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                </div>
+                <div class="disclaimer">
+                    Baba GPT can make mistakes. Consider verifying important information.
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Migration Modal -->
+    <div id="migration-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Migrate Your Chat History</h2>
+            <p>We found existing chat data from your previous session. Would you like to migrate it to the new system?</p>
+            <div class="modal-buttons">
+                <button id="migrate-btn" class="btn-primary">Migrate</button>
+                <button id="skip-migration-btn" class="btn-secondary">Start Fresh</button>
+            </div>
+            <div id="migration-status" class="migration-status" style="display: none;">
+                <div class="spinner"></div>
+                <p id="migration-status-text">Migrating your chats...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to our JavaScript logic file -->
+    <script src="script.js"></script>
+</body>
+</html>
