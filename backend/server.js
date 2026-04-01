@@ -3,18 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-// Environment validation
-const requiredEnvVars = ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'];
-const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
-
-if (missingVars.length > 0) {
-    console.error('ERROR: Missing required environment variables:', missingVars.join(', '));
-    console.error('Please ensure your environment variables are set: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY');
-    // Don't exit on Vercel, just log the error
-    if (!process.env.VERCEL) {
-        process.exit(1);
-    }
-}
+// Environment validation handled by config/supabaseClient.js
 
 // Initialize Express app
 const app = express();
@@ -80,11 +69,17 @@ app.use((req, res, next) => {
 });
 
 // 5. Serve static files from frontend directory
-app.use(express.static(path.join(__dirname, '../frontend')));
+const frontendPath = path.join(__dirname, '../frontend');
+app.use(express.static(frontendPath));
 
 // Health check endpoint
-app.get('/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+app.get('/api/health', (req, res) => {
+    const supabase = require('./config/supabaseClient');
+    res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        supabase_connected: !!supabase
+    });
 });
 
 // API Routes
@@ -92,16 +87,21 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chats', chatRoutes);
 app.use('/api/messages', messageRoutes);
 
-// Serve index.html for root path
+// Handle root path separately to serve index.html if Vercel rewrite doesn't catch it
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+    res.sendFile(path.join(frontendPath, 'index.html'), (err) => {
+        if (err) {
+            console.error('Failed to send index.html:', err.message);
+            res.status(500).send('Frontend files not found. Please ensure the frontend directory is deployed.');
+        }
+    });
 });
 
-// 404 handler for undefined routes
-app.use((req, res) => {
+// 404 handler for undefined API routes
+app.use('/api', (req, res) => {
     res.status(404).json({
         error: {
-            message: 'Route not found',
+            message: 'API route not found',
             timestamp: new Date().toISOString()
         }
     });
@@ -109,7 +109,18 @@ app.use((req, res) => {
 
 // Error Handler - Catch and format errors
 app.use((err, req, res, next) => {
-    console.error('Error:', err);
+    console.error('Unhandled Error:', err);
+    
+    // If it's a Supabase connection error (usually occurs if supabase is null)
+    if (err.message && err.message.includes('Supabase')) {
+        return res.status(503).json({
+            error: {
+                message: 'Database connection unavailable. Please check environment variables.',
+                timestamp: new Date().toISOString()
+            }
+        });
+    }
+
     res.status(err.status || 500).json({
         error: {
             message: err.message || 'Internal server error',

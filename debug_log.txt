@@ -1,0 +1,84 @@
+﻿[dotenv@17.3.1] injecting env (7) from backend\.env -- tip: ΓÜÖ∩╕Å  enable debug logging with { debug: true }
+node : C:\Users\asus\OneDr
+ive\Desktop\dapran sir pro
+ject\backend\node_modules\
+path-to-regexp\dist\index.
+js:85
+At line:1 char:1
++ node backend/server.js 
+2>&1 | out-file -encoding 
+utf8 debug_log.txt;  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
+    + CategoryInfo        
+      : NotSpecified: (C  
+  :\Users\asus\O...ist\   
+ index.js:85:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+            throw new 
+PathError(`Missing 
+parameter name at index 
+${index}`, str);
+            ^
+
+PathError [TypeError]: 
+Missing parameter name at 
+index 6: /api/*; visit htt
+ps://git.new/pathToRegexpE
+rror for info
+    at name (C:\Users\asus
+\OneDrive\Desktop\dapran 
+sir project\backend\node_m
+odules\path-to-regexp\dist
+\index.js:85:19)
+    at parse (C:\Users\asu
+s\OneDrive\Desktop\dapran 
+sir project\backend\node_m
+odules\path-to-regexp\dist
+\index.js:101:59)
+    at pathToRegexp (C:\Us
+ers\asus\OneDrive\Desktop\
+dapran sir project\backend
+\node_modules\path-to-rege
+xp\dist\index.js:263:56)
+    at Object.match (C:\Us
+ers\asus\OneDrive\Desktop\
+dapran sir project\backend
+\node_modules\path-to-rege
+xp\dist\index.js:225:30)
+    at matcher (C:\Users\a
+sus\OneDrive\Desktop\dapra
+n sir project\backend\node
+_modules\router\lib\layer.
+js:86:23)
+    at new Layer (C:\Users
+\asus\OneDrive\Desktop\dap
+ran sir project\backend\no
+de_modules\router\lib\laye
+r.js:93:62)
+    at Function.use (C:\Us
+ers\asus\OneDrive\Desktop\
+dapran sir project\backend
+\node_modules\router\index
+.js:398:19)
+    at 
+Function.<anonymous> (C:\U
+sers\asus\OneDrive\Desktop
+\dapran sir project\backen
+d\node_modules\express\lib
+\application.js:222:21)
+    at Array.forEach 
+(<anonymous>)
+    at Function.use (C:\Us
+ers\asus\OneDrive\Desktop\
+dapran sir project\backend
+\node_modules\express\lib\
+application.js:219:7) {
+  originalPath: '/api/*'
+}
+
+Node.js v22.16.0
