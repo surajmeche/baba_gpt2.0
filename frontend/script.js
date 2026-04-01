@@ -36,7 +36,7 @@ let state = {
 // 4. BACKEND API CLIENT
 // ==========================================
 const BackendAPI = {
-    baseURL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    baseURL: (window.location.port !== '3000' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
         ? 'http://localhost:3000/api' 
         : '/api',
     maxRetries: 3,

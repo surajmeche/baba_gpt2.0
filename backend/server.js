@@ -72,8 +72,11 @@ app.use((req, res, next) => {
 const frontendPath = path.join(__dirname, '../frontend');
 app.use(express.static(frontendPath));
 
+// API Router consolidated
+const apiRouter = express.Router();
+
 // Health check endpoint
-app.get('/api/health', (req, res) => {
+apiRouter.get('/health', (req, res) => {
     const supabase = require('./config/supabaseClient');
     res.json({ 
         status: 'ok', 
@@ -82,12 +85,16 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/chats', chatRoutes);
-app.use('/api/messages', messageRoutes);
+// Mount Routes to API Router
+apiRouter.use('/auth', authRoutes);
+apiRouter.use('/chats', chatRoutes);
+apiRouter.use('/messages', messageRoutes);
 
-// Handle root path separately to serve index.html if Vercel rewrite doesn't catch it
+// Mount API Router to App with /api prefix (for local/standard) and / fallback (for Vercel)
+app.use('/api', apiRouter);
+app.use('/', apiRouter);
+
+// Handle root path separately to serve index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(frontendPath, 'index.html'), (err) => {
         if (err) {

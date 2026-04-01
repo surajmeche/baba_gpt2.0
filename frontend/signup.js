@@ -1,6 +1,6 @@
 // signup.js - User registration with Supabase Authentication API
 
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+const API_BASE_URL = (window.location.port !== '3000' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
     ? 'http://localhost:3000/api' 
     : '/api';
 
