@@ -875,6 +875,12 @@ async function fetchDynamicResponse(userText) {
         });
     }
 
+    // Add current user message to the contents
+    historyContents.push({
+        role: 'user',
+        parts: [{ text: userText }]
+    });
+
     const currentDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     const reqBody = {
         contents: historyContents,
