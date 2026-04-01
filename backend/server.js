@@ -9,8 +9,11 @@ const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
 if (missingVars.length > 0) {
     console.error('ERROR: Missing required environment variables:', missingVars.join(', '));
-    console.error('Please ensure your .env file contains: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PORT');
-    process.exit(1);
+    console.error('Please ensure your environment variables are set: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY');
+    // Don't exit on Vercel, just log the error
+    if (!process.env.VERCEL) {
+        process.exit(1);
+    }
 }
 
 // Initialize Express app
