@@ -2,21 +2,11 @@
   "name": "baba-gpt",
   "version": "1.0.0",
   "description": "Chat application with Supabase backend",
-  "main": "backend/server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js"
+    "build": "cd backend && npm install",
+    "start": "node backend/server.js"
   },
   "keywords": ["chat", "ai", "supabase"],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.100.1",
-    "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1"
-  },
-  "engines": {
-    "node": ">=18.x"
-  }
+  "license": "ISC"
 }
