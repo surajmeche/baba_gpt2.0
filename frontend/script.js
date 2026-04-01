@@ -3,7 +3,7 @@
 // =========================================
 // 1. CONFIGURATION
 // =========================================
-const API_KEY = 'AIzaSyAUM3jpNrVcEFr33OpMx1yLal3c29f6g5w';
+const API_KEY = 'AIzaSyAo6StZ5WFstdD1b6nV7Eespr-2WbRA8qw';
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
 // =========================================
