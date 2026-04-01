@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -28,7 +28,25 @@ const messageRoutes = require('./routes/messageRoutes');
 // Middleware stack
 // 1. CORS - Allow cross-origin requests from frontend
 app.use(cors({
-    origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:5501', 'http://127.0.0.1:5501'],
+    origin: function(origin, callback) {
+        // Allow requests with no origin (mobile apps, curl, etc)
+        if (!origin) return callback(null, true);
+        
+        const allowedOrigins = [
+            'http://localhost:5500',
+            'http://127.0.0.1:5500',
+            'http://localhost:5501',
+            'http://127.0.0.1:5501',
+            'http://localhost:3000'
+        ];
+        
+        // Allow any Vercel deployment URL
+        if (origin.endsWith('.vercel.app') || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        
+        callback(null, true); // Allow all origins for now
+    },
     credentials: true
 }));
 
