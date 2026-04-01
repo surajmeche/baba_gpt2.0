@@ -82,7 +82,11 @@ apiRouter.get('/health', (req, res) => {
     res.json({ 
         status: 'ok', 
         timestamp: new Date().toISOString(),
-        supabase_connected: !!supabase
+        supabase_connected: !!supabase,
+        gemini_key_set: !!process.env.GEMINI_API_KEY,
+        gemini_key_length: process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.length : 0,
+        node_version: process.version,
+        env_keys: Object.keys(process.env).filter(k => k.includes('GEMINI') || k.includes('SUPABASE') || k === 'PORT')
     });
 });
 
