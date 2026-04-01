@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const geminiRoutes = require('./routes/geminiRoutes');
 
 // Middleware stack
 // 1. CORS - Allow cross-origin requests from frontend
@@ -89,6 +90,7 @@ apiRouter.get('/health', (req, res) => {
 apiRouter.use('/auth', authRoutes);
 apiRouter.use('/chats', chatRoutes);
 apiRouter.use('/messages', messageRoutes);
+apiRouter.use('/gemini', geminiRoutes);
 
 // Mount API Router to App with /api prefix (for local/standard) and / fallback (for Vercel)
 app.use('/api', apiRouter);

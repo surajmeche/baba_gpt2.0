@@ -3,8 +3,8 @@
 // =========================================
 // 1. CONFIGURATION
 // =========================================
-const API_KEY = 'AIzaSyAo6StZ5WFstdD1b6nV7Eespr-2WbRA8qw';
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+// API key is now securely stored on the backend server.
+// All Gemini requests are proxied through /api/gemini/chat.
 
 // =========================================
 // 2. DOM ELEMENTS SELECTION
@@ -846,7 +846,7 @@ async function addMessageToStateAndUI(role, contentObj, saveToHistory = true) {
 }
 
 // ==========================================================
-// 10. DYNAMIC API INTEGRATION 
+// 10. DYNAMIC API INTEGRATION (Secured via Backend Proxy)
 // ==========================================================
 async function fetchDynamicResponse(userText) {
     
@@ -884,10 +884,12 @@ async function fetchDynamicResponse(userText) {
     };
 
     try {
-        const response = await fetch(API_URL, {
+        // Call the backend proxy instead of Gemini directly (API key stays on the server)
+        const response = await fetch(`${BackendAPI.baseURL}/gemini/chat`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                ...BackendAPI.getAuthHeaders()
             },
             body: JSON.stringify(reqBody)
         });
