@@ -2,11 +2,8 @@
   "version": 2,
   "builds": [
     {
-      "src": "backend/server.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["backend/**", "frontend/**"]
-      }
+      "src": "backend/package.json",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -22,6 +19,5 @@
       "src": "/(.*)",
       "dest": "/backend/server.js"
     }
-  ],
-  "installCommand": "cd backend && npm install"
+  ]
 }
