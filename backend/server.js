@@ -97,11 +97,13 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Backend server running on port ${PORT}`);
-    console.log(`Supabase URL: ${process.env.SUPABASE_URL}`);
-    console.log(`Server started at ${new Date().toISOString()}`);
-});
+// Start server (only in local development, not on Vercel)
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Backend server running on port ${PORT}`);
+        console.log(`Supabase URL: ${process.env.SUPABASE_URL}`);
+        console.log(`Server started at ${new Date().toISOString()}`);
+    });
+}
 
 module.exports = { app };
