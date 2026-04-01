@@ -850,7 +850,7 @@ async function addMessageToStateAndUI(role, contentObj, saveToHistory = true) {
 // ==========================================================
 async function fetchDynamicResponse(userText) {
     
-    const currentChat = state.chats.findIndex(c => c.id === state.currentChatId);
+    const currentChat = state.chats.find(c => c.id === state.currentChatId);
     let historyContents = [];
     
     // Map existing history
