@@ -298,15 +298,17 @@ function showErrorMessage(error, context = '') {
     
     // Map specific error statuses to user-friendly messages
     if (error.status === 400) {
-        userMessage = 'Invalid request. Please check your input and try again.';
+        userMessage = error.message || 'Invalid request. Please check your input and try again.';
     } else if (error.status === 404) {
         userMessage = 'The requested item was not found. It may have been deleted.';
     } else if (error.status === 413) {
         userMessage = 'Your message is too large. Please reduce the number or size of images.';
     } else if (error.status === 415) {
         userMessage = 'Invalid request format. Please try again.';
+    } else if (error.status === 503) {
+        userMessage = error.message || 'Service unavailable. Please try again later.';
     } else if (error.status >= 500) {
-        userMessage = 'Server error. Please try again later.';
+        userMessage = error.message || 'Server error. Please try again later.';
     } else if (error.name === 'TypeError' || error.name === 'AbortError') {
         userMessage = 'Connection error. Please check your internet connection and try again.';
     } else if (error.message) {

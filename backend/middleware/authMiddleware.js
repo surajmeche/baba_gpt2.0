@@ -21,6 +21,17 @@ const authenticateUser = async (req, res, next) => {
 
         const token = authHeader.substring(7); // Remove 'Bearer ' prefix
 
+        // Check if Supabase client is available
+        if (!supabase) {
+            console.error('CRITICAL: Supabase client is null in auth middleware');
+            return res.status(503).json({
+                error: {
+                    message: 'Database service unavailable. Please try again later.',
+                    timestamp: new Date().toISOString()
+                }
+            });
+        }
+
         // Verify token with Supabase
         const { data, error } = await supabase.auth.getUser(token);
 

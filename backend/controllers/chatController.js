@@ -7,6 +7,16 @@ const supabase = require('../config/supabaseClient');
  */
 const createChat = async (req, res, next) => {
     try {
+        // Check if Supabase client is available
+        if (!supabase) {
+            return res.status(503).json({
+                error: {
+                    message: 'Database service unavailable',
+                    timestamp: new Date().toISOString()
+                }
+            });
+        }
+
         const { title } = req.body;
         const user_id = req.user.id; // From auth middleware
 
