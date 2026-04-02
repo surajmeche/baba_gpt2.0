@@ -90,6 +90,62 @@ apiRouter.get('/health', (req, res) => {
     });
 });
 
+// Database diagnostic endpoint - tests actual DB connectivity
+apiRouter.get('/health/db-test', async (req, res) => {
+    const supabase = require('./config/supabaseClient');
+    const results = {
+        timestamp: new Date().toISOString(),
+        supabase_client: !!supabase,
+        tests: {}
+    };
+
+    if (!supabase) {
+        results.tests.connection = { status: 'FAIL', error: 'Supabase client is null' };
+        return res.json(results);
+    }
+
+    // Test 1: Query chats table
+    try {
+        const { data, error } = await supabase.from('chats').select('id').limit(1);
+        results.tests.chats_table = error 
+            ? { status: 'FAIL', error: error.message, code: error.code, details: error.details }
+            : { status: 'OK', row_count: data ? data.length : 0 };
+    } catch (e) {
+        results.tests.chats_table = { status: 'CRASH', error: e.message };
+    }
+
+    // Test 2: Query messages table
+    try {
+        const { data, error } = await supabase.from('messages').select('id').limit(1);
+        results.tests.messages_table = error
+            ? { status: 'FAIL', error: error.message, code: error.code, details: error.details }
+            : { status: 'OK', row_count: data ? data.length : 0 };
+    } catch (e) {
+        results.tests.messages_table = { status: 'CRASH', error: e.message };
+    }
+
+    // Test 3: Try inserting & deleting a test chat
+    try {
+        const testId = '00000000-0000-0000-0000-000000000000';
+        const { data, error } = await supabase
+            .from('chats')
+            .insert([{ user_id: testId, title: 'DB_TEST_CHAT' }])
+            .select()
+            .single();
+        if (error) {
+            results.tests.insert_chat = { status: 'FAIL', error: error.message, code: error.code, details: error.details, hint: error.hint };
+        } else {
+            results.tests.insert_chat = { status: 'OK', inserted_id: data.id };
+            // Clean up test row
+            await supabase.from('chats').delete().eq('id', data.id);
+        }
+    } catch (e) {
+        results.tests.insert_chat = { status: 'CRASH', error: e.message };
+    }
+
+    res.json(results);
+});
+
 // Mount Routes to API Router
 apiRouter.use('/auth', authRoutes);
 apiRouter.use('/chats', chatRoutes);
@@ -122,7 +178,15 @@ app.use('/api', (req, res) => {
 
 // Error Handler - Catch and format errors
 app.use((err, req, res, next) => {
-    console.error('Unhandled Error:', err);
+    console.error('Unhandled Error:', {
+        message: err.message,
+        stack: err.stack,
+        code: err.code,
+        details: err.details,
+        hint: err.hint,
+        path: req.path,
+        method: req.method
+    });
     
     // If it's a Supabase connection error (usually occurs if supabase is null)
     if (err.message && err.message.includes('Supabase')) {
@@ -134,9 +198,21 @@ app.use((err, req, res, next) => {
         });
     }
 
+    // If it's a null reference on supabase client
+    if (err.message && (err.message.includes('Cannot read properties of null') || err.message.includes('Cannot read property'))) {
+        return res.status(503).json({
+            error: {
+                message: 'Database client not initialized. Check SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.',
+                debug: err.message,
+                timestamp: new Date().toISOString()
+            }
+        });
+    }
+
     res.status(err.status || 500).json({
         error: {
             message: err.message || 'Internal server error',
+            code: err.code || undefined,
             timestamp: new Date().toISOString()
         }
     });
