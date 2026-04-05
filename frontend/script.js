@@ -162,6 +162,12 @@ const BackendAPI = {
             
             throw error;
         }
+        
+        // Handle 204 No Content - no body to parse
+        if (response.status === 204) {
+            return {};
+        }
+        
         return response.json();
     },
     
