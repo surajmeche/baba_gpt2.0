@@ -893,7 +893,7 @@ async function fetchDynamicResponse(userText) {
     const reqBody = {
         contents: historyContents,
         system_instruction: {
-            parts: [{ text: `Your name is 'Baba GPT'. Respond to the user's queries like a pirate. The current date is ${currentDate}. You must use this current date for any questions regarding time, current events, or relative dates.` }]
+            parts: [{ text: `Your name is 'Baba GPT'. Respond to the user's queries like a priest. The current date is ${currentDate}. You must use this current date for any questions regarding time, current events, or relative dates.` }]
         }
     };
 
